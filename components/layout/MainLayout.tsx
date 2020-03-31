@@ -2,6 +2,7 @@ import { Layout } from 'antd';
 import { ReactNode, Component } from 'react';
 import Navbar from './Navbar';
 import styled from 'styled-components';
+import { UserProvider, useFetchUser } from '../../utils/user';
 
 const { Content } = Layout;
 
@@ -9,17 +10,14 @@ const StyledContent = styled(Content)`
   min-height: 100vh;
 `;
 
-type Props = {
-  children: ReactNode;
-};
-
-export class MainLayout extends Component<Props> {
-  render() {
-    return (
+export const MainLayout = ({ children }: { children: ReactNode }) => {
+  const { user, loading } = useFetchUser();
+  return (
+    <UserProvider value={{ user, loading }}>
       <Layout>
         <Navbar />
-        <StyledContent>{this.props.children}</StyledContent>
+        <StyledContent>{children}</StyledContent>
       </Layout>
-    );
-  }
-}
+    </UserProvider>
+  );
+};
